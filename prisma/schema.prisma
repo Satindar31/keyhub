@@ -13,11 +13,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model user {
+  id    String @id
+  name  String
+  email String
+  apps  app[]
+}
+
+model app {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  apiKey    String   @unique
+  keys      key[]
+
+  user user[]
+}
+
 model key {
-  value      String   @unique
-  id         Int      @id @default(autoincrement())
-  generated  DateTime @default(now())
-  expires    DateTime
-  identifier String
-  env        String   @default("development")
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  value       String   @unique
+  permissions String[]
+
+  app app[]
 }

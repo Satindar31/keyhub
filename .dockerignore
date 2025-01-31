@@ -1,0 +1,12 @@
+node_modules
+dist
+npm-debug.log
+pnpm-debug.log
+.git
+.gitignore
+.env
+*.md
+.DS_Store
+coverage
+.nyc_output
+test

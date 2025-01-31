@@ -1,31 +1,33 @@
-import { FastifyPluginAsync } from 'fastify'
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { FastifyPluginAsync } from "fastify";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
-const getKeyDetails: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.get('/getKeyDetails', async function (request, reply) {
-    const { key } = request.query as {key: string}
-    if (!key) {
-      return reply.code(400).send({ error: 'Missing key' })
+const getKeyDetails: FastifyPluginAsync = async (
+  fastify,
+  opts
+): Promise<void> => {
+  fastify.get<{ Params: { key: string } }>("/:key", async function (request, reply) {
+    const key = request.params.key;
+
+    const keyDetails = await prisma.key.findUnique({
+      where: {
+        value: key,
+      },
+    });
+
+    if (!keyDetails) {
+      reply.status(404).send(JSON.stringify({ error: "Key not found" }));
+      return;
     }
 
-    try {
-        const key_db = await prisma.key.findUnique({
-            where: {
-            value: key
-            }
-        })
-    
-        if (!key_db) {
-            return reply.code(404).send({ error: 'Key not found' })
-        }
-    
-        return reply.send({ key: key_db.value, expires: key_db.expires, key_id: key_db.id, identifier: key_db.identifier, env: key_db.env })
-    }
-    catch (e) {
-        return reply.code(500).send({ error: 'Error getting key', e })
-    }
-  })
-}
+    reply.send(
+      JSON.stringify({
+        key: keyDetails.value,
+        permissions: keyDetails.permissions,
+        name: keyDetails.name,
+      })
+    );
+  });
+};
 
 export default getKeyDetails;
