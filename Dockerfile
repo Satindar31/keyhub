@@ -2,7 +2,7 @@
 FROM node:20-slim AS builder
 
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm install -g pnpm
 
 # Set working directory
 WORKDIR /app
@@ -23,7 +23,7 @@ RUN pnpm run build:ts
 FROM node:20-slim
 
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm install -g pnpm
 
 # Set working directory
 WORKDIR /app
