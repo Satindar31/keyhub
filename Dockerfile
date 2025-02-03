@@ -51,4 +51,4 @@ USER fastify
 EXPOSE 3000
 
 # Start the application using Fastify CLI
-CMD ["pnpm", "start"]
+CMD ["pnpm", "start:prod"]
