@@ -25,6 +25,8 @@ FROM node:20-slim
 # Install pnpm
 RUN npm install -g pnpm
 
+RUN apt-get install -y openssl
+
 # Set working directory
 WORKDIR /app
 
@@ -36,6 +38,7 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder --chown=fastify:nodejs /app/package.json ./
 COPY --from=builder --chown=fastify:nodejs /app/pnpm-lock.yaml* ./
 COPY --from=builder --chown=fastify:nodejs /app/dist ./dist
+COPY --from=builder --chown=fastify:nodejs /app/prisma ./prisma
 
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile
