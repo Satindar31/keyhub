@@ -1,4 +1,4 @@
-name: Hub
+name: Push to docker
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - "package.json"
       - "tsconfig.json"
       - ".dockerignore"
-      - ".github/workflows/docker.yml"
+      - ".github/workflows/docker-image.yml"
   workflow_dispatch:
 
 jobs:
