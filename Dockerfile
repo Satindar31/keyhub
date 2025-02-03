@@ -25,7 +25,10 @@ FROM node:20-slim
 # Install pnpm
 RUN npm install -g pnpm
 
-RUN apt-get install -y openssl
+RUN apt-get update && \
+    apt-get install -y openssl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
