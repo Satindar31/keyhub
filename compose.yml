@@ -1,34 +1,41 @@
 services:
   backend:
     image: satindar31/keyhub:latest
-    container_name: keyhub
+    container_name: keyhub-api
     ports:
       - "3000:3000"
     env_file:
       - .env
     environment:
-      - NODE_ENV=production
-      - PORT=3000
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_NAME=keyhubdb
+      - DATABASE_URL: postgresql://keyhub:keyhub-db@db:5432/keyhubdb
+      - NODE_ENV: production
+      - PORT: 3000
     depends_on:
-      - db
+      - db:
+          condition: service_healthy
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:3000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
     restart: unless-stopped
 
   db:
     image: postgres:15
-    container_name: postgres
-    ports:
-      - "5432:5432"
+    container_name: keyhub-postgres
     environment:
       - POSTGRES_DB=keyhubdb
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=keyhub
+      - POSTGRES_PASSWORD=keyhub-db
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
 volumes:
