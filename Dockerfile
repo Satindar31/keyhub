@@ -13,6 +13,7 @@ COPY package.json pnpm-lock.yaml* ./
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
+RUN npx prisma generate
 
 # Copy source code and TypeScript configuration
 COPY . .
@@ -27,8 +28,8 @@ FROM node:20-slim
 RUN npm install -g pnpm
 
 RUN apt-get update && \
-    apt-get install -y openssl && \
-    apt-get clean && \
+apt-get install -y openssl && \
+apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Set working directory
