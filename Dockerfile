@@ -14,6 +14,11 @@ COPY /prisma ./prisma
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
+RUN apt-get update && \
+apt-get install -y openssl && \
+apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN npx prisma generate
 
 # Copy source code and TypeScript configuration
@@ -46,8 +51,6 @@ COPY --from=builder --chown=fastify:nodejs /app/pnpm-lock.yaml* ./
 COPY --from=builder --chown=fastify:nodejs /app/dist ./dist
 # Copy the generated Prisma client
 COPY --from=builder --chown=fastify:nodejs /app/prisma ./prisma
-COPY --from=builder --chown=fastify:nodejs /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder --chown=fastify:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile
