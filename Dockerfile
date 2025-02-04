@@ -13,13 +13,9 @@ COPY package.json pnpm-lock.yaml* ./
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Generate prisma client in prod again
-RUN pnpm dlx prisma generate
 
 # Copy source code and TypeScript configuration
 COPY . .
-
-
 
 # Build TypeScript
 RUN pnpm run build:ts
@@ -53,6 +49,8 @@ COPY --from=builder --chown=fastify:nodejs /app/node_modules/@prisma ./node_modu
 
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile
+
+RUN pnpm dlx prisma generate
 
 # Set environment variables
 ENV NODE_ENV=production
