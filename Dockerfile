@@ -15,8 +15,8 @@ COPY /prisma ./prisma
 RUN pnpm install --frozen-lockfile
 
 RUN apt-get update && \
-apt-get install -y openssl && \
-apt-get clean && \
+    apt-get install -y openssl && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 RUN npx prisma generate
@@ -34,9 +34,11 @@ FROM node:20-slim
 RUN npm install -g pnpm
 
 RUN apt-get update && \
-apt-get install -y openssl && \
-apt-get clean && \
+    apt-get install -y openssl && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install curl -y    
 
 # Set working directory
 WORKDIR /app
