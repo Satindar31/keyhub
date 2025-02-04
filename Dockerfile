@@ -50,7 +50,7 @@ COPY --from=builder --chown=fastify:nodejs /app/node_modules/@prisma ./node_modu
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile
 
-RUN pnpm dlx prisma generate
+RUN npx prisma generate
 
 # Set environment variables
 ENV NODE_ENV=production
