@@ -10,6 +10,7 @@ services:
       - DATABASE_URL=postgresql://keyhub:keyhub-db@db:5432/keyhubdb
       - NODE_ENV=production
       - PORT=3000
+      - FASTIFY_ADDRESS=0.0.0.0
     depends_on:
       db:
         condition: service_healthy

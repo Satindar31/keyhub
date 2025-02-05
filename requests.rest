@@ -1,1 +1,45 @@
+// Hello world!
 http://localhost:3000/
+
+### Make a new user
+POST http://localhost:3000/frontend/newUser HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Jhon Doe",
+    "email": "jhondoe@example.com"
+}
+
+
+### Make a new app
+POST http://localhost:3000/frontend/newApp HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Hello World App",
+    // Put the ID you get from the previous request here
+    "ownerID": "cm6rllx7y0000cz94dbidw372"
+}
+
+### Make a new / reset API key to use
+POST http://localhost:3000/frontend/newKey HTTP/1.1
+content-type: application/json
+
+{
+    "userEmail": "jhondoe@example.com",
+    // Put the ID you get from the previous request here
+    "appId": "cm6rlm9010000czqk88gvq5gp"
+}
+
+### Make a new API key
+
+// Send a request and then use the API key to make all future requests
+POST http://localhost:3000/generate HTTP/1.1
+content-type: application/json
+
+{
+    "name": "John Doe",
+    "permissions": ["read", "write"],
+    // This is the API key generated for me, replace it with your own
+    "apiKey": "661f0f9700a5ac361618263984c8b94362ff20354a3db8cda4dc7f5b906ae1bc"
+}
